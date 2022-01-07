@@ -1,0 +1,27 @@
+	public void cutIn() {
+		share = (startDayInput /7);
+		remainder = (startDayInput % 7)+1;
+		for(int i=0; i<dayCount.length; i++) {
+			dayCount[i]+=share; 
+		 }
+		 if(first_day.equals("월")) {
+			 endMon();
+		 }
+		 if(first_day.equals("화")) {
+			 endTue();
+		 }
+		 if(first_day.equals("수")) {
+			 endWed();
+		 }
+		 if(first_day.equals("목")) {
+			 endThur();
+		 }
+		 if(first_day.equals("금")) {
+			 endFri();
+		 }
+		 if(first_day.equals("토")) {
+			 endSat();
+		 }
+		 if(first_day.equals("일")) {
+			 endSun();
+		 }
