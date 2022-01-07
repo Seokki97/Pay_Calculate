@@ -1,0 +1,9 @@
+	public void cutInPayCalculate() {
+		mon_result = mon*dayCount[0]*pay;
+		tue_result = tue*dayCount[1]*pay;
+		wed_result = wed*dayCount[2]*pay;
+		thur_result = thur*dayCount[3]*pay;
+		fri_result = fri*dayCount[4]*pay;
+		sat_result = sat*dayCount[5]*pay;
+		sun_result = sun*dayCount[6]*pay;
+	}
