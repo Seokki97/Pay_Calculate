@@ -1,0 +1,161 @@
+class Calendar{ //입력한 달에 월요일~일요일이 각 몇번 있는지를 나타내는 클래스
+	Scanner sc = new Scanner(System.in);
+	int[] days = new int[12];
+	int year, month, monthDay;
+	int[] SEVEN = new int[7];
+	String first_day;
+	public void input() {
+		System.out.println("년을 입력하세요.");
+		year= sc.nextInt();
+		while(true) {
+			if(year <1 || year >9999) {
+				System.out.println("잘못된 숫자를 입력했습니다. 다시 입력해주세요");
+				year =sc.nextInt();
+			}
+			else {
+				break;
+			}
+		}
+
+		System.out.println("월을 입력하세요");
+		month = sc.nextInt();		
+		while(true) {
+			if(month <1 || month >12) {
+				System.out.println("잘못된 숫자를 입력했습니다. 다시 입력해주세요");
+				month =sc.nextInt();
+			}
+			else {
+				break;
+			}
+		}
+
+		System.out.println("시작 요일을 입력하세요");
+		first_day = sc.next();
+	}
+	public void leapYear() { //윤년 검사 
+		if( year % 4==0) {
+			days = new int[] {31,29,31,30,31,30,31,31,30,31,30,31};
+		}else { 
+			days = new int[] {31,28,31,30,31,30,31,31,30,31,30,31};
+		}
+		for(int i=0; i<SEVEN.length; i++) {
+			SEVEN[i] = 4;
+		}
+	} 
+	// 월요일이라고 입력했으면 그 달의 월요일이 총 몇개인지 나타내주는 메소드들
+
+	public void startMon() {
+		 // .equal() 안쓰면 비교 불가 이유 -깃허브에 올림
+			if(monthDay == 31) {
+			for(int i=0; i<3; i++) {
+				 SEVEN[i] +=1;
+			}
+			if(monthDay == 30) {
+				for(int j =0; j<2 ; j++) {
+					SEVEN[j] +=1;		
+				}
+			
+			}
+		}
+	}
+	public void startTue() {
+			if(monthDay == 31) {
+			for(int i = 1; i < 4; i++) {
+				 SEVEN[i] +=1;
+			}
+			if(monthDay == 30) {
+				for(int j =1; j<3; j++) {
+					SEVEN[j] +=1;
+				}
+			}
+			
+		}
+	}
+	public void startWed() {
+			if(monthDay == 31) {
+			for(int i = 2; i<5; i++) {
+				 SEVEN[i] +=1;
+			}
+			if(monthDay == 30) {
+				for(int j =2; j<4; j++) {
+					SEVEN[j] +=1;
+				}
+			}
+			
+		}
+	}
+	public void startThur() {
+			if(monthDay==31) {
+			for(int i=3; i<6; i++) {
+				 SEVEN[i] +=1;
+			}
+			if(monthDay == 30) {
+				for(int j=3; j<5; j++) {
+					SEVEN[j] +=1;
+				}
+			
+			}
+		}
+	}
+	public void startFri() {
+			if(monthDay==31) {
+			for(int i=4; i<7; i++) {
+				 SEVEN[i] +=1;
+			}
+			if(monthDay==30) {
+				for(int j=4; j<6; j++) {
+					SEVEN[j] +=1;
+				}
+			
+			}
+		}
+	}
+	public void startSat() {
+			if(monthDay==31) {
+			for(int i=5; i<7; i++) {
+				 SEVEN[i]+=1;
+			}
+				SEVEN[0] += 1 ;
+			}
+			if(monthDay==30) {
+				for(int j =5; j<7; j++) {
+					SEVEN[j]+=1;
+				}
+			
+		}
+	}
+	public void startSun() {
+			if(monthDay==31) {
+				SEVEN[6] +=1;
+				SEVEN[0] +=1;
+				SEVEN[1] +=1;
+			if(monthDay==30) {
+				SEVEN[6] +=1;
+				SEVEN[0] +=1;
+			}	
+			}
+		
+	}
+
+
+	public void startFind() {
+		monthDay = days[month-1];
+		if(first_day.equals("월"))	{
+		startMon();
+		}if(first_day.equals("화"))	{
+		startTue();
+		}if(first_day.equals("수"))	{
+		startWed();
+		}if(first_day.equals("목"))	{
+		startThur();
+		}if(first_day.equals("금"))	{
+		startFri();
+		}if(first_day.equals("토"))	{
+		startSat();
+		}if(first_day.equals("일"))	{
+			startSun();
+			}
+
+
+	}
+} 
