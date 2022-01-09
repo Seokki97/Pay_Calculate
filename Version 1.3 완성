@@ -1,0 +1,701 @@
+package javamainl;
+import java.util.Scanner;
+import java.util.Stack;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+class Calendar{ //입력한 달에 월요일~일요일이 각 몇번 있는지를 나타내는 클래스
+	Scanner sc = new Scanner(System.in);
+	int[] days = new int[12];
+	int year, month, monthDay;
+	int[] SEVEN = new int[7];
+	String first_day;
+	public void input() { //년 월, 시작요일을 입력받는 메소드
+		System.out.println("년을 입력하세요.");
+		year= sc.nextInt();
+		while(true) {
+			if(year <1 || year >9999) {
+				System.out.println("잘못된 숫자를 입력했습니다. 다시 입력해주세요");
+				year =sc.nextInt();
+			}
+			else {
+				break;
+			}
+		}
+
+		System.out.println("월을 입력하세요");
+		month = sc.nextInt();		
+		while(true) {
+			if(month <1 || month >12) {
+				System.out.println("잘못된 숫자를 입력했습니다. 다시 입력해주세요");
+				month =sc.nextInt();
+			}
+			else {
+				break;
+			}
+		}
+
+		System.out.println("시작 요일을 입력하세요");
+		first_day = sc.next();
+	}
+	public void leapYear() { //윤년인지 아닌지 판별해주는 메소드
+		if( year % 4==0) {
+			days = new int[] {31,29,31,30,31,30,31,31,30,31,30,31};
+		}else { 
+			days = new int[] {31,28,31,30,31,30,31,31,30,31,30,31};
+		}
+		for(int i=0; i<SEVEN.length; i++) {
+			SEVEN[i] = 4;
+		}
+	} 
+	public void startMon() { //input값에 따라 해당 월의 월요일의 개수를 counting
+			if(monthDay == 31) {
+			for(int i=0; i<3; i++) {
+				 SEVEN[i] +=1;
+			}
+			if(monthDay == 30) {
+				for(int j =0; j<2 ; j++) {
+					SEVEN[j] +=1;		
+				}
+			
+			}
+		}
+	}
+	public void startTue() {//input값에 따라 해당 월의 화요일의 개수를 counting
+			if(monthDay == 31) {
+			for(int i = 1; i < 4; i++) {
+				 SEVEN[i] +=1;
+			}
+			if(monthDay == 30) {
+				for(int j =1; j<3; j++) {
+					SEVEN[j] +=1;
+				}
+			}
+			
+		}
+	}
+	public void startWed() {//input값에 따라 해당 월의 수요일의 개수를 counting
+			if(monthDay == 31) {
+			for(int i = 2; i<5; i++) {
+				 SEVEN[i] +=1;
+			}
+			if(monthDay == 30) {
+				for(int j =2; j<4; j++) {
+					SEVEN[j] +=1;
+				}
+			}
+			
+		}
+	}
+	public void startThur() {//input값에 따라 해당 월의 목요일의 개수를 counting
+			if(monthDay==31) {
+			for(int i=3; i<6; i++) {
+				 SEVEN[i] +=1;
+			}
+			if(monthDay == 30) {
+				for(int j=3; j<5; j++) {
+					SEVEN[j] +=1;
+				}
+			
+			}
+		}
+	}
+	public void startFri() {//input값에 따라 해당 월의 금요일의 개수를 counting
+			if(monthDay==31) {
+			for(int i=4; i<7; i++) {
+				 SEVEN[i] +=1;
+			}
+			if(monthDay==30) {
+				for(int j=4; j<6; j++) {
+					SEVEN[j] +=1;
+				}
+			
+			}
+		}
+	}
+	public void startSat() {//input값에 따라 해당 월의 토요일의 개수를 counting
+			if(monthDay==31) {
+			for(int i=5; i<7; i++) {
+				 SEVEN[i]+=1;
+			}
+				SEVEN[0] += 1 ;
+			}
+			if(monthDay==30) {
+				for(int j =5; j<7; j++) {
+					SEVEN[j]+=1;
+				}
+			
+		}
+	}
+	public void startSun() {//input값에 따라 해당 월의 일요일의 개수를 counting
+			if(monthDay==31) {
+				SEVEN[6] +=1;
+				SEVEN[0] +=1;
+				SEVEN[1] +=1;
+			if(monthDay==30) {
+				SEVEN[6] +=1;
+				SEVEN[0] +=1;
+			}	
+			}
+		
+	}
+
+
+	public void startFind() { //input에 요일 입력을 하면 그에 따른 메소드가 실행
+		monthDay = days[month-1];
+		if(first_day.equals("월"))	{
+		startMon();
+		}if(first_day.equals("화"))	{
+		startTue();
+		}if(first_day.equals("수"))	{
+		startWed();
+		}if(first_day.equals("목"))	{
+		startThur();
+		}if(first_day.equals("금"))	{
+		startFri();
+		}if(first_day.equals("토"))	{
+		startSat();
+		}if(first_day.equals("일"))	{
+			startSun();
+			}
+
+
+	}
+} 
+
+	class StartDayFuntion extends Calendar{  //중간에 들어오거나, 중간에 나가는 사람을 계산해주는 클래스
+	int[] dayCount = {0,0,0,0,0,0,0};
+	int share; 
+	int remainder; 
+	int startDayInput=0 ;
+	public void  endMon() { // 1일부터 input값까지의 월요일 갯수를 카운팅
+			for(int i=0; i<remainder; i++) {
+				dayCount[i]+=1;
+			}
+		 
+	}
+	public void  endTue() {// 1일부터 input값까지의 화요일 갯수를 카운팅
+			for(int i=1; i<remainder+1; i++) {
+				dayCount[i]+=1;
+			}		 
+	 
+	}
+	public void  endWed() {// 1일부터 input값까지의 수요일 갯수를 카운팅
+				for(int i = 2; i < 7 ; i++){
+					if( remainder == i){
+					   	for(int j = 2; j < i+1; j++){
+					   	dayCount[j] +=1;
+					   }
+					}
+				}
+	}
+	public void  endThur() {// 1일부터 input값까지의 목요일 갯수를 카운팅
+			  if(remainder == 6) {
+				 for(int i = 3; i<dayCount.length; i++) {
+					 dayCount[i] +=1;
+				 } // 3 4 5 6  + 0
+				 dayCount[0] +=1;
+		 }
+		 for(int i = 2; i<6; i++) {
+			 if( remainder == i) {
+				 for(int j =3; j< i+2; j++) {
+					 dayCount[j] +=1;
+				 }
+			 }
+		 }
+		 
+	}
+	public void  endFri() {// 1일부터 input값까지의 금요일 갯수를 카운팅
+		
+			 if(remainder == 5) {
+				 for(int i = 4; i<dayCount.length; i++) {
+					 dayCount[i] +=1;
+				 }
+				 dayCount[0]+=1;
+			 } if(remainder == 6) {
+				 for(int i = 4; i<dayCount.length; i++) {
+					 dayCount[i] +=1;
+				 }
+				 dayCount[0] +=1;
+				 dayCount[1] +=1;
+			 }
+		 for(int i = 2; i<5; i++) {
+			 if( remainder == i) {
+				 for(int j =4; j< i+3; j++) {
+					 dayCount[j] +=1;
+				 }
+			 }
+		 
+		}
+	}
+	public void  endSat() {// 1일부터 input값까지의 토요일 갯수를 카운팅
+			 if(remainder ==2) {
+				 dayCount[5] +=1;
+			 } 
+			 if(remainder ==3) {
+				 for(int i = 5; i<dayCount.length; i++) {
+					 dayCount[i] +=1;
+					 
+				 }
+			 }
+			for(int i = 4; i<7; i++) {
+					  if(remainder == i) {
+						 for(int j = 5; j< dayCount.length; j++) {
+							 dayCount[j] +=1;
+						 }
+						 for(int k = 0; k< i-3; k++) {
+							 dayCount[k] +=1;
+						 		} 
+					  }
+		 }
+		 
+	}
+	public void  endSun() {// 1일부터 input값까지의 일요일 갯수를 카운팅
+		for(int j = 2; j<7; j++) {
+			if(remainder ==j) {
+				dayCount[6] +=1;
+			for(int k = 0; k< j-2; k++) {
+				dayCount[k] +=1;
+							}
+						}
+					}
+		 		
+	}
+	public void endFind() { // input받은 요일과 같은 요일의 메소드를 불러옴
+		share = startDayInput /7;
+		 remainder = (startDayInput % 7); 
+		 for(int i=0; i<dayCount.length; i++) {
+			dayCount[i]+=share; 
+		 }
+		 if(first_day.equals("월")) {
+			 endMon();
+		 }
+		 if(first_day.equals("화")) {
+			 endTue();
+		 }
+		 if(first_day.equals("수")) {
+			 endWed();
+		 }
+		 if(first_day.equals("목")) {
+			 endThur();
+		 }
+		 if(first_day.equals("금")) {
+			 endFri();
+		 }
+		 if(first_day.equals("토")) {
+			 endSat();
+		 }
+		 if(first_day.equals("일")) {
+			 endSun();
+		 }
+
+	}
+	public void cutIn() { //중간에 나간 사람을 계산하기 위한 메소드
+		share = (startDayInput /7);
+		remainder = (startDayInput % 7)+1;
+		for(int i=0; i<dayCount.length; i++) {
+			dayCount[i]+=share; 
+		 }
+		 if(first_day.equals("월")) {
+			 endMon();
+		 }
+		 if(first_day.equals("화")) {
+			 endTue();
+		 }
+		 if(first_day.equals("수")) {
+			 endWed();
+		 }
+		 if(first_day.equals("목")) {
+			 endThur();
+		 }
+		 if(first_day.equals("금")) {
+			 endFri();
+		 }
+		 if(first_day.equals("토")) {
+			 endSat();
+		 }
+		 if(first_day.equals("일")) {
+			 endSun();
+		 }
+	}
+	public void countInitialization() { //dayCount를 초기화해줘야 하기 때문에 만든 메소드
+		for(int i = 0; i< 7; i++) {
+			dayCount[i] = 0;
+		} 
+	}
+}
+class PayCalculation extends StartDayFuntion{ //실제 급여계산을 이루어주는 클래스
+	static int pay = 9160;
+	int mon=0, tue=0, wed=0,thur=0,fri=0,sat=0,sun=0;
+	int mon_result=0, tue_result=0, wed_result=0,
+			thur_result=0, fri_result=0, sat_result=0, sun_result=0 ;  
+	int monStart=0,tueStart=0,wedStart=0,
+			thurStart=0,friStart=0,satStart=0,sunStart=0;
+	public void startDayConcept() { // 1일이 아닌 중간에 들어와서 근무를 시작한 경우의 메소드
+		monStart = SEVEN[0] - dayCount[0];
+		tueStart = SEVEN[1] - dayCount[1];
+		wedStart = SEVEN[2] - dayCount[2];
+		thurStart = SEVEN[3] - dayCount[3];
+		friStart = SEVEN[4] - dayCount[4];
+		satStart = SEVEN[5] - dayCount[5];
+		sunStart = SEVEN[6] - dayCount[6];
+	}
+	public void startDayPayCalculate() { // 그에 따른 요일별 pay결과
+		mon_result = mon*monStart*pay;
+		tue_result = tue*tueStart*pay;
+		wed_result = wed*wedStart*pay;
+		thur_result = thur*thurStart*pay;
+		fri_result = fri*friStart*pay;
+		sat_result = sat*satStart*pay;
+		sun_result = sun*sunStart*pay;
+	}
+	public void payCalculate() { //1일부터 정상적으로 일한 경우의 메소드
+		mon_result = mon*SEVEN[0]*pay;
+		tue_result = tue*SEVEN[1]*pay;
+		wed_result = wed*SEVEN[2]*pay;
+		thur_result = thur*SEVEN[3]*pay;
+		fri_result = fri*SEVEN[4]*pay;
+		sat_result = sat*SEVEN[5]*pay;
+		sun_result = sun*SEVEN[6]*pay;
+	}
+	public void cutInPayCalculate() { //중간에 나간 사람, 즉 1일부터 ~x일까지의 급여량을 나타내는 메소드
+		mon_result = mon*dayCount[0]*pay;
+		tue_result = tue*dayCount[1]*pay;
+		wed_result = wed*dayCount[2]*pay;
+		thur_result = thur*dayCount[3]*pay;
+		fri_result = fri*dayCount[4]*pay;
+		sat_result = sat*dayCount[5]*pay;
+		sun_result = sun*dayCount[6]*pay;
+	}
+}
+
+class Option extends PayCalculation{ //추가적인 기능(추가, 감소근무)을 나타내는 클래스
+	Scanner sc = new Scanner(System.in);
+	String plusMinus;
+	int result=0;
+	int plusTime, minusTime;
+	int plusPay=0, minusPay=0;
+	public void plusPay() { //추가근무페이를 더해주는 메소드
+		System.out.println("추가근무 시간을 입력해주세요");
+		plusTime = sc.nextInt();
+		plusPay = plusTime*pay;
+	}
+	public void minusPay() { //감소근무 pay를 빼주는 메소드
+		System.out.println("근무감소 시간을 입력해주세요");
+		minusTime = sc.nextInt();
+		minusPay = minusTime*pay;
+
+	}
+	public void discrimin() { //총 결과값들을 출력해주는 메소드
+		System.out.println("추가근무가 있으면 '추가', 근무 감소가 있다면 '감소', 없다면 0을 입력해주세요");
+		plusMinus = sc.next();
+		if(plusMinus.equals("추가")) {
+			plusPay();
+			System.out.println("급여는" +(result +plusPay) +"입니다.");
+		}
+		else if(plusMinus.equals("감소")) {
+			minusPay();
+			System.out.println("급여는" +(result -minusPay) +"입니다.");
+		}
+		else if(plusMinus.equals("0")) {
+			System.out.println("급여는" +result+"입니다.");
+		}
+	}
+	
+}
+class Worker extends Option{ //근무자들의 정보를 담아낸 클래스
+	Scanner sc = new Scanner(System.in);
+	int cutIn=0;
+	public void Jung_yun() { 
+	 mon = 4;
+	 tue = 4;
+	 wed = 3;
+	 thur = 3;
+		System.out.println("정연의 근무시작일을 입력해주세요");
+		startDayInput = sc.nextInt() ;
+		System.out.println("중간에 나갔습니까? 맞으면 1을 입력해주세요");
+		cutIn = sc.nextInt();
+		if(cutIn == 1) {
+			endFind();
+			startDayConcept();
+			cutInPayCalculate();
+			result = mon_result + tue_result+ wed_result+thur_result;
+		
+		}
+		else{
+			if(startDayInput > 1) {
+			endFind();
+			startDayConcept();
+			//총결과
+			startDayPayCalculate();
+			result = mon_result + tue_result + wed_result+ thur_result;
+			
+		} else {
+			payCalculate();
+			result = mon_result + tue_result + wed_result+ thur_result;
+			}
+		}
+		
+		discrimin();
+		countInitialization();
+	} 
+	public void Hee_jun() {
+		mon = 5;
+		tue = 5;
+		sat = 10;
+		sun = 8;
+			System.out.println("희준의 근무시작일을 입력해주세요");
+			startDayInput = sc.nextInt();
+			System.out.println("중간에 나갔습니까? 맞으면 1을 입력해주세요");
+			cutIn = sc.nextInt();
+			if(cutIn == 1) {
+				endFind();
+				startDayConcept();
+				cutInPayCalculate();
+				result = mon_result + tue_result+ wed_result+thur_result;
+			
+			}
+			else{
+				if(startDayInput > 1) {
+			
+				endFind();
+				 //시작날짜 반영
+				startDayConcept();				
+				startDayPayCalculate();
+				result = mon_result + tue_result + thur_result + sat_result +sun_result;				
+			}
+				else{
+			payCalculate();
+			result = mon_result + tue_result + wed_result+ thur_result + sat_result;
+			}	
+		}
+			discrimin();
+			countInitialization();
+	}
+	public void Chae_young() {
+		thur = 4;
+		fri = 10;
+			System.out.println("채영의 근무시작일을 입력해주세요");
+			startDayInput = sc.nextInt();
+			System.out.println("중간에 나갔습니까? 맞으면 1을 입력해주세요");
+			cutIn = sc.nextInt();
+			if(cutIn == 1) {
+				endFind();
+				startDayConcept();
+				cutInPayCalculate();
+				result = mon_result + tue_result+ wed_result+thur_result;
+			
+			}
+			else {
+			if(startDayInput > 1) {
+				endFind();
+				//근무시작날짜
+				startDayConcept();
+				startDayPayCalculate();
+				result = thur_result+fri_result;
+			} else{
+				payCalculate();
+				result = thur_result + fri_result;
+				}
+			}
+			discrimin();
+			countInitialization();
+	}
+	public void Jae_lim() {
+		fri = 6;
+		sat = 5;
+		System.out.println("재림의 근무시작일을 입력해주세요");
+		startDayInput = sc.nextInt();
+		System.out.println("중간에 나갔습니까? 맞으면 1을 입력해주세요");
+		cutIn = sc.nextInt();
+		if(cutIn == 1) {
+			endFind();
+			startDayConcept();
+			cutInPayCalculate();
+			result = mon_result + tue_result+ wed_result+thur_result;
+		
+		}
+		else {
+		if(startDayInput > 1) {
+			endFind();
+			//근무시작날짜
+			startDayConcept();
+			startDayPayCalculate();
+			result =fri_result+sat_result;
+		} else{
+			payCalculate();
+			result = fri_result+sat_result;
+			}
+		}
+		discrimin();
+		countInitialization();
+	}
+	public void Su_yun() {
+		sat = 6;
+		sun = 8;
+			System.out.println("수연의 근무시작일을 입력해주세요");
+			startDayInput = sc.nextInt();
+			System.out.println("중간에 나갔습니까? 맞으면 1을 입력해주세요");
+			cutIn = sc.nextInt();
+			if(cutIn == 1) {
+				endFind();
+				startDayConcept();
+				cutInPayCalculate();
+				result = mon_result + tue_result+ wed_result+thur_result;
+			
+			}
+			else {
+			if(startDayInput > 1) {
+				endFind();
+				//근무시작날짜
+				startDayConcept();
+				startDayPayCalculate();
+				result = sat_result +sun_result;
+			} else{
+				payCalculate();
+				result = sat_result + sun_result;
+				}
+			}
+			discrimin();
+			countInitialization();
+	}
+	public void Ga_eun() {
+		mon = 3;
+		tue = 3;
+		wed = 4;
+		thur = 4;
+			System.out.println("가영의 근무시작일을 입력해주세요");
+			startDayInput = sc.nextInt();
+			System.out.println("중간에 나갔습니까? 맞으면 1을 입력해주세요");
+			cutIn = sc.nextInt();
+			if(cutIn == 1) {
+				endFind();
+				startDayConcept();
+				cutInPayCalculate();
+				result = mon_result + tue_result+ wed_result+thur_result;
+			
+			}
+			else {
+			if(startDayInput > 1) {
+				endFind();
+				//근무시작날자
+				startDayConcept();
+				startDayPayCalculate();
+				result = mon_result+tue_result+wed_result+thur_result;
+			}else{
+			payCalculate();
+			result = mon_result + tue_result + wed_result + thur_result;
+			}
+			}
+			discrimin();
+			countInitialization();
+	}
+	public void Min_ji() {
+		mon = 7;
+		tue = 7;
+			System.out.println("민지의 근무시작일을 입력해주세요");
+			startDayInput = sc.nextInt();
+			System.out.println("중간에 나갔습니까? 맞으면 1을 입력해주세요");
+			cutIn = sc.nextInt();
+			if(cutIn == 1) {
+				endFind();
+				startDayConcept();
+				cutInPayCalculate();
+				result = mon_result + tue_result+ wed_result+thur_result;
+			
+			}
+			else {
+			if(startDayInput > 1) {
+				endFind();
+				 //시작날짜 반영
+				startDayConcept();
+				startDayPayCalculate();
+				result = mon_result + tue_result;
+			}else{
+				payCalculate();
+				result = mon_result+ tue_result;
+				}
+			}
+			discrimin();
+			countInitialization();			
+	}
+	public void Se_bin() {
+	thur = 4;
+	fri =4;
+	sat = 3; 
+		System.out.println("세빈의 근무시작일을 입력해주세요");
+		startDayInput = sc.nextInt();
+		System.out.println("중간에 나갔습니까? 맞으면 1을 입력해주세요");
+		cutIn = sc.nextInt();
+		if(cutIn == 1) {
+			endFind();
+			startDayConcept();
+			cutInPayCalculate();
+			result = mon_result + tue_result+ wed_result+thur_result;
+		
+		}
+		else {
+		if(startDayInput > 1) {
+			endFind();
+			startDayConcept();
+			startDayPayCalculate();
+			result = thur_result+fri_result+sat_result;
+
+		}else{
+			payCalculate();
+			result = thur_result + fri_result + sat_result;
+			}
+		}
+		discrimin();
+		countInitialization();
+	}
+	public void Chae_eun() {
+	wed = 7;
+	thur =4; 
+		System.out.println("채은의 근무시작일을 입력해주세요");
+		startDayInput = sc.nextInt();
+		System.out.println("중간에 나갔습니까? 맞으면 1을 입력해주세요");
+		cutIn = sc.nextInt();
+		if(cutIn == 1) {
+			endFind();
+			startDayConcept();
+			cutInPayCalculate();
+			result = mon_result + tue_result+ wed_result+thur_result;
+		
+		}
+		else {
+		if(startDayInput > 1) {
+			endFind();
+			startDayConcept();
+			startDayPayCalculate();
+			result = wed_result+ thur_result;
+
+		}else{
+			payCalculate();
+			result = wed_result+ thur_result;
+			}
+		}
+		discrimin();
+		countInitialization();
+	}
+	public void cutInWorker() {//대타자
+	}	
+}
+
+public class javapractice {
+	public static void main(String[] args) {
+		Worker c1 = new Worker();
+		c1.input();
+		c1.leapYear();
+		c1.startFind();
+		c1.Jung_yun();
+		c1.Hee_jun();
+		c1.Chae_young();
+		c1.Jae_lim();
+		c1.Su_yun();
+		c1.Ga_eun();
+		c1.Min_ji();
+		c1.Se_bin();
+		c1.Chae_eun();	
+			}
+		}
